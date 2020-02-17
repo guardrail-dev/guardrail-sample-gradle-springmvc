@@ -35,7 +35,17 @@ class PetHandlerImpl implements PetHandler {
     }
 
     public CompletionStage<PetHandler.GetPetByIdResponse> getPetById(final long petId) {
-        return null;
+        System.out.println("Got a request for " + petId);
+        Pet pet = new Pet.Builder("Fluffy").withId(petId).build();
+        PetHandler.GetPetByIdResponse resp;
+        if (petId == 1234) {
+            resp = PetHandler.GetPetByIdResponse.Ok(pet);
+        } else if (petId > 0) {
+            resp = PetHandler.GetPetByIdResponse.NotFound;
+        } else {
+            resp = PetHandler.GetPetByIdResponse.BadRequest;
+        }
+        return CompletableFuture.completedFuture(resp);
     }
 
     public CompletionStage<PetHandler.DeletePetResponse> deletePet(final long petId, final java.util.Optional<String> apiKey,
