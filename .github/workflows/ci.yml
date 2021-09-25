@@ -26,20 +26,3 @@ jobs:
         java-version: ${{ matrix.java }}
     - name: Build
       run: ./gradlew clean build
-  automerge:
-    runs-on: [ubuntu-20.04]
-    name: automerge
-    needs: [build]
-    if: github.base_ref == 'master' && github.actor == 'dependabot[bot]'
-    steps:
-    - name: merge
-      uses: actions/github-script@v4.1
-      with:
-        script: |
-          github.pulls.merge({
-            owner: context.payload.repository.owner.login,
-            repo: context.payload.repository.name,
-            pull_number: context.payload.pull_request.number,
-            merge_method: 'squash'
-          })
-        github-token: ${{secrets.GITHUB_TOKEN}}
